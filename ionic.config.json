@@ -1,0 +1,24 @@
+{
+  "name": "GoldTrust Wallet",
+  "type": "next",
+  "integrations": {
+    "capacitor": {}
+  },
+  "build": {
+    "ios": {
+      "options": {
+        "target": "ios",
+        "buildType": "release"
+      }
+    },
+    "android": {
+      "options": {
+        "target": "android",
+        "buildType": "release"
+      }
+    }
+  },
+  "typescript": {
+    "src": true
+  }
+}

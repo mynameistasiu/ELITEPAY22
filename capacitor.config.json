@@ -1,0 +1,19 @@
+{
+  "appId": "com.goldtrust.wallet",
+  "appName": "GoldTrust Wallet",
+  "webDir": "out",
+  "bundledWebRuntime": false,
+  "android": {
+    "buildOptions": {
+      "minSdkVersion": 21,
+      "targetSdkVersion": 34,
+      "compileSDKVersion": 34
+    }
+  },
+  "ios": {
+    "minVersion": "13.0"
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
