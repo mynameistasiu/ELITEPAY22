@@ -30,9 +30,11 @@ const steps = [
 export default function Home() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [showGuide, setShowGuide] = useState(true);
   const [loadingMessage, setLoadingMessage] = useState('Preparing secure session...');
 
   const goWithLoader = (path, message = 'Preparing secure session...') => {
+    setShowGuide(false);
     setLoadingMessage(message);
     setLoading(true);
 
@@ -51,6 +53,139 @@ export default function Home() {
           display: grid;
           gap: 18px;
           padding: 8px 0 22px;
+        }
+
+        .guide-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 10000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 18px;
+          background: rgba(16, 32, 51, 0.52);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        }
+
+        .guide-modal {
+          width: min(940px, 100%);
+          max-height: min(92vh, 860px);
+          overflow: auto;
+          border-radius: 8px;
+          border: 1px solid rgba(219, 230, 243, 0.96);
+          background: #ffffff;
+          box-shadow: 0 28px 80px rgba(16, 32, 51, 0.28);
+          animation: settle 0.24s ease both;
+        }
+
+        .guide-header {
+          display: flex;
+          align-items: start;
+          justify-content: space-between;
+          gap: 14px;
+          padding: 20px 20px 14px;
+          border-bottom: 1px solid #edf3f8;
+        }
+
+        .guide-title {
+          margin: 0;
+          color: #102033;
+          font-size: clamp(22px, 3vw, 32px);
+          line-height: 1.08;
+          font-weight: 950;
+        }
+
+        .guide-close {
+          width: 38px;
+          height: 38px;
+          flex: 0 0 auto;
+          display: grid;
+          place-items: center;
+          border: 1px solid #dbe6f3;
+          border-radius: 8px;
+          background: #ffffff;
+          color: #102033;
+          font-size: 24px;
+          line-height: 1;
+          cursor: pointer;
+        }
+
+        .guide-close:hover {
+          background: #f3f8fb;
+          color: #077a55;
+        }
+
+        .guide-body {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(310px, 0.92fr);
+          gap: 18px;
+          padding: 18px 20px 20px;
+        }
+
+        .guide-intro {
+          margin: 0 0 14px;
+          color: #52667a;
+          font-size: 15px;
+        }
+
+        .guide-steps {
+          display: grid;
+          gap: 10px;
+        }
+
+        .guide-step {
+          display: grid;
+          grid-template-columns: 36px 1fr;
+          gap: 11px;
+          align-items: start;
+          padding: 12px;
+          border: 1px solid #dbe6f3;
+          border-radius: 8px;
+          background: #fbfdff;
+        }
+
+        .guide-step span {
+          width: 36px;
+          height: 36px;
+          display: grid;
+          place-items: center;
+          border-radius: 8px;
+          color: #ffffff;
+          background: linear-gradient(135deg, #0f9f6e, #19b9a7);
+          font-weight: 950;
+        }
+
+        .guide-step h3 {
+          margin: 0 0 4px;
+          color: #102033;
+          font-size: 15px;
+        }
+
+        .guide-step p {
+          margin: 0;
+        }
+
+        .guide-video-wrap {
+          display: grid;
+          gap: 12px;
+          align-content: start;
+        }
+
+        .guide-video {
+          width: 100%;
+          aspect-ratio: 16 / 9;
+          border-radius: 8px;
+          background: #102033;
+          border: 1px solid #dbe6f3;
+        }
+
+        .guide-actions {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          padding: 0 20px 20px;
         }
 
         .hero-panel {
@@ -294,6 +429,10 @@ export default function Home() {
             grid-template-columns: 1fr;
           }
 
+          .guide-body {
+            grid-template-columns: 1fr;
+          }
+
           .feature-grid,
           .step-list,
           .security-grid {
@@ -327,8 +466,103 @@ export default function Home() {
           .step-card {
             grid-template-columns: 1fr;
           }
+
+          .guide-overlay {
+            align-items: stretch;
+            padding: 10px;
+          }
+
+          .guide-modal {
+            max-height: calc(100vh - 20px);
+          }
+
+          .guide-header,
+          .guide-body,
+          .guide-actions {
+            padding-left: 14px;
+            padding-right: 14px;
+          }
+
+          .guide-actions {
+            justify-content: stretch;
+          }
         }
       `}</style>
+
+      {showGuide && (
+        <div className="guide-overlay" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+          <div className="guide-modal">
+            <div className="guide-header">
+              <div>
+                <div className="eyebrow" style={{ marginBottom: 10 }}>Welcome To ElitePay</div>
+                <h2 className="guide-title" id="guide-title">How to earn from this website</h2>
+              </div>
+              <button className="guide-close" type="button" aria-label="Close tutorial" onClick={() => setShowGuide(false)}>
+                ×
+              </button>
+            </div>
+
+            <div className="guide-body">
+              <div>
+                <p className="guide-intro">
+                  ElitePay helps you create an account, run Pulse Miner, claim your reward into your wallet,
+                  and withdraw securely when your account is ready.
+                </p>
+
+                <div className="guide-steps" aria-label="How to earn steps">
+                  <article className="guide-step">
+                    <span>1</span>
+                    <div>
+                      <h3>Create your account</h3>
+                      <p className="small muted">Register with your name and phone number so the app can prepare your wallet.</p>
+                    </div>
+                  </article>
+                  <article className="guide-step">
+                    <span>2</span>
+                    <div>
+                      <h3>Open the mining center</h3>
+                      <p className="small muted">Go to Pulse Miner, start a mining session, and wait for the progress to complete.</p>
+                    </div>
+                  </article>
+                  <article className="guide-step">
+                    <span>3</span>
+                    <div>
+                      <h3>Claim your reward</h3>
+                      <p className="small muted">When the session is complete, claim the reward so it enters your ElitePay wallet balance.</p>
+                    </div>
+                  </article>
+                  <article className="guide-step">
+                    <span>4</span>
+                    <div>
+                      <h3>Withdraw with your code</h3>
+                      <p className="small muted">Buy or verify your withdrawal code, add your bank details, and submit your withdrawal request.</p>
+                    </div>
+                  </article>
+                </div>
+              </div>
+
+              <div className="guide-video-wrap">
+                <video className="guide-video" controls preload="metadata" playsInline>
+                  <source src="/tutorial.MP4" type="video/mp4" />
+                  Your browser does not support the video tutorial.
+                </video>
+                <p className="small muted">
+                  Watch this tutorial to see how the website works before you continue.
+                </p>
+              </div>
+            </div>
+
+            <div className="guide-actions">
+              <button className="btnGhost" type="button" onClick={() => setShowGuide(false)}>
+                Close
+              </button>
+              <button className="btn" type="button" onClick={() => goWithLoader('/register', 'Creating your ElitePay account...')}>
+                Create Account
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="home-shell">
         <section className="card hero-panel">
