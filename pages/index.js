@@ -166,20 +166,6 @@ export default function Home() {
           margin: 0;
         }
 
-        .guide-video-wrap {
-          display: grid;
-          gap: 12px;
-          align-content: start;
-        }
-
-        .guide-video {
-          width: 100%;
-          aspect-ratio: 16 / 9;
-          border-radius: 8px;
-          background: #102033;
-          border: 1px solid #dbe6f3;
-        }
-
         .guide-actions {
           display: flex;
           gap: 10px;
@@ -541,15 +527,6 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="guide-video-wrap">
-                <video className="guide-video" controls preload="metadata" playsInline>
-                  <source src="/tutorial.MP4" type="video/mp4" />
-                  Your browser does not support the video tutorial.
-                </video>
-                <p className="small muted">
-                  Watch this tutorial to see how the website works before you continue.
-                </p>
-              </div>
             </div>
 
             <div className="guide-actions">
