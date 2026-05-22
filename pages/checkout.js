@@ -8,7 +8,7 @@ const DISPLAY_PRICE = 6700;
 const ACCOUNT_NUMBER = '6511699109';
 const ACCOUNT_NAME = 'Abdulrahim Usman';
 const BANK_NAME = 'Moniepoint';
-const WA = '+2348136347797';
+const WA = '+2348133861975';
 
 function CopyIcon({ size = 16 }) {
   return (
