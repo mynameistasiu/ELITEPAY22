@@ -8,7 +8,7 @@ const DISPLAY_PRICE = 10000;
 const ACCOUNT_NUMBER = '2078928132';
 const ACCOUNT_NAME = 'Abdulmumini Bello';
 const BANK_NAME = 'Kuda Bank';
-const WA = '‪+2349016796843‬';
+const WA = '‪+2347073606629';
 
 function CopyIcon({ size = 16 }) {
   return (
