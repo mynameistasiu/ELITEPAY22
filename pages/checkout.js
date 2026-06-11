@@ -3,38 +3,37 @@ import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import { saveTx } from '../utils/storage';
 
-const CODE_PRICE = 10000;
-const DISPLAY_PRICE = 10000;
-const ACCOUNT_NUMBER = '6992226243';
-const ACCOUNT_NAME = 'BASHIR AMINU';
-const BANK_NAME = 'Moniepoint MFB';
-const WA = '‪+2347073606629';
+const CODE_PRICE = 7000;
+const DISPLAY_PRICE = 7000;
+const ACCOUNT_NUMBER = '2077767374';
+const ACCOUNT_NAME = 'Usman Amina';
+const BANK_NAME = 'Kuda Bank';
+const WA = '+2347031572133';
 
 function CopyIcon({ size = 16 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <rect x="8" y="8" width="11" height="11" rx="2" stroke="currentColor" strokeWidth="2" />
-      <path d="M5 15H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M5 15H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
-function BankIcon() {
+function KudaMark() {
   return (
-    <svg width="82" height="64" viewBox="0 0 82 64" fill="none" aria-hidden="true">
-      <path d="M41 4 14 18v6h54v-6L41 4Z" fill="#cbd5e1" />
-      <path d="M20 28h8v22h-8V28Zm17 0h8v22h-8V28Zm17 0h8v22h-8V28Z" fill="#94a3b8" />
-      <path d="M14 52h54v7H14v-7Z" fill="#cbd5e1" />
-      <circle cx="23" cy="49" r="10" fill="#d9e2ec" stroke="#94a3b8" strokeWidth="2" />
-      <circle cx="57" cy="49" r="10" fill="#d9e2ec" stroke="#94a3b8" strokeWidth="2" />
-    </svg>
-  );
-}
-
-function MoniepointMark() {
-  return (
-    <div className="monie-logo" aria-hidden="true">
-      <span />
+    <div className="kuda-mark" aria-hidden="true">
+      <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+        <rect width="100" height="100" rx="18" fill="#4B257D" />
+        <path d="M22 20V80" stroke="white" strokeWidth="8" strokeLinecap="round" />
+        <path d="M35 20L25 50L35 80" stroke="white" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M50 20L35 50L50 80" stroke="white" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M78 20L50 50L78 80" stroke="white" strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
     </div>
   );
 }
@@ -42,6 +41,7 @@ function MoniepointMark() {
 export default function Checkout() {
   const router = useRouter();
   const { name: qName, phone: qPhone } = router.query;
+
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [countdown, setCountdown] = useState(10 * 60);
@@ -79,6 +79,19 @@ export default function Checkout() {
     }
   };
 
+  const buildWhatsAppUrl = () => {
+    const message = encodeURIComponent(
+      `Hello, I have made payment for ElitePay withdrawal code.\n` +
+        `Name: ${name || 'Not provided'}\n` +
+        `Phone: ${phone || 'Not provided'}\n` +
+        `Amount: NGN ${CODE_PRICE.toLocaleString()}\n` +
+        `Account: ${ACCOUNT_NUMBER}\n` +
+        `Bank: ${BANK_NAME}`
+    );
+
+    return `https://wa.me/${WA.replace('+', '')}?text=${message}`;
+  };
+
   const confirmPayment = () => {
     if (countdown === 0) {
       alert('Payment time expired. Please restart checkout.');
@@ -86,24 +99,29 @@ export default function Checkout() {
     }
 
     setConfirming(true);
+
     setTimeout(() => {
       saveTx({
         type: 'buy_code',
         amount: CODE_PRICE,
         status: 'pending',
-        meta: { name, phone, bank: BANK_NAME, account: ACCOUNT_NUMBER },
+        meta: {
+          name,
+          phone,
+          bank: BANK_NAME,
+          account: ACCOUNT_NUMBER,
+        },
         created_at: new Date().toISOString(),
       });
+
       setConfirming(false);
       setPaymentStatus('awaiting');
-    }, 1200);
+      window.location.href = buildWhatsAppUrl();
+    }, 900);
   };
 
   const contactVendor = () => {
-    const message = encodeURIComponent(
-      `Hello, I want to made payment for ElitePay withdrawal code.\nName: ${name || 'Not provided'}\nPhone: ${phone || 'Not provided'}\nAmount: NGN ${CODE_PRICE.toLocaleString()}\nAccount: ${ACCOUNT_NUMBER}`
-    );
-    window.open(`https://wa.me/${WA.replace('+', '')}?text=${message}`, '_blank', 'noopener');
+    window.location.href = buildWhatsAppUrl();
   };
 
   const minutes = String(Math.floor(countdown / 60)).padStart(2, '0');
@@ -124,7 +142,7 @@ export default function Checkout() {
           background: #f8fafc;
           border: 1px solid #e7edf4;
           border-radius: 8px;
-          padding: 10px 16px 18px;
+          padding: 12px 16px 18px;
           box-shadow: 0 24px 70px rgba(16, 32, 51, 0.12);
         }
 
@@ -133,13 +151,13 @@ export default function Checkout() {
           height: 74px;
           object-fit: contain;
           display: block;
-          margin: 0 auto 16px;
+          margin: 0 auto 14px;
         }
 
         .bank-illustration {
           display: flex;
           justify-content: center;
-          margin-bottom: 14px;
+          margin-bottom: 10px;
         }
 
         .pay-title {
@@ -148,23 +166,24 @@ export default function Checkout() {
           font-size: 22px;
           font-weight: 900;
           margin: 0;
+          letter-spacing: -0.02em;
+        }
+
+        .copy-row {
+          text-align: center;
+          margin-top: 8px;
         }
 
         .copy-amount {
-          margin: 8px auto 17px;
           display: inline-flex;
           align-items: center;
           gap: 6px;
           border: 0;
           background: transparent;
-          color: #8a96a6;
+          color: #6b7280;
           cursor: pointer;
           font-size: 13px;
           font-weight: 750;
-        }
-
-        .copy-row {
-          text-align: center;
         }
 
         .instruction {
@@ -175,7 +194,7 @@ export default function Checkout() {
           font-size: 13px;
           line-height: 1.45;
           text-align: center;
-          margin-bottom: 17px;
+          margin: 14px 0 16px;
         }
 
         .instruction strong {
@@ -187,41 +206,54 @@ export default function Checkout() {
         .account-card {
           overflow: hidden;
           background: #ffffff;
-          border-radius: 8px;
+          border-radius: 10px;
           box-shadow: 0 16px 38px rgba(16, 32, 51, 0.12);
           border: 1px solid rgba(219, 230, 243, 0.8);
           text-align: center;
         }
 
         .account-main {
-          padding: 22px 18px 0;
+          padding: 22px 18px 18px;
         }
 
-        .monie-logo {
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          margin: 0 auto 10px;
-          display: grid;
-          place-items: center;
-          background: #1667ff;
+        .bank-row {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 12px;
         }
 
-        .monie-logo span {
-          width: 24px;
-          height: 18px;
+        .kuda-mark {
+          width: 42px;
+          height: 42px;
+          border-radius: 10px;
+          overflow: hidden;
+          flex-shrink: 0;
+          box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        .kuda-mark svg {
+          width: 100%;
+          height: 100%;
           display: block;
-          border-radius: 50% 50% 45% 45%;
-          background: #ffffff;
-          transform: rotate(-25deg);
-          clip-path: polygon(0 0, 100% 18%, 68% 100%, 18% 82%);
         }
 
         .bank-name {
           color: #0b1220;
           font-size: 16px;
           font-weight: 900;
-          margin-bottom: 12px;
+          margin: 0;
+          letter-spacing: -0.01em;
+        }
+
+        .bank-label {
+          display: block;
+          color: #6b7280;
+          font-size: 11px;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          margin-bottom: 5px;
         }
 
         .account-number {
@@ -230,16 +262,18 @@ export default function Checkout() {
           justify-content: center;
           gap: 8px;
           color: #1677f2;
-          font-size: 27px;
+          font-size: 28px;
           font-weight: 950;
           border: 0;
           background: transparent;
           cursor: pointer;
           padding: 0;
+          letter-spacing: 0.02em;
+          line-height: 1.1;
         }
 
         .account-name {
-          margin: 7px 0 18px;
+          margin: 8px 0 0;
           color: #174473;
           font-size: 17px;
           font-weight: 850;
@@ -285,13 +319,6 @@ export default function Checkout() {
           background: #1677f2;
         }
 
-        .confirm-note {
-          text-align: center;
-          color: #a0a9b5;
-          font-size: 12px;
-          margin-bottom: 16px;
-        }
-
         .timer {
           text-align: center;
           color: ${countdown <= 60 ? '#ef4444' : '#64748b'};
@@ -300,12 +327,20 @@ export default function Checkout() {
           margin-bottom: 10px;
         }
 
+        .confirm-note {
+          text-align: center;
+          color: #a0a9b5;
+          font-size: 12px;
+          margin-bottom: 16px;
+        }
+
         .footer-actions {
           display: grid;
           grid-template-columns: 1fr 1px 1fr;
           align-items: center;
           border-top: 1px solid #edf2f7;
           padding-top: 13px;
+          margin-top: 14px;
         }
 
         .divider {
@@ -372,9 +407,19 @@ export default function Checkout() {
       <div className="checkout-shell">
         <section className="pay-screen" aria-label="Bank transfer checkout">
           <img className="checkout-logo" src="/elitepay-logo.png" alt="ElitePay" />
-          <div className="bank-illustration"><BankIcon /></div>
+
+          <div className="bank-illustration">
+            <svg width="84" height="64" viewBox="0 0 84 64" fill="none" aria-hidden="true">
+              <path d="M42 4 14 18v6h56v-6L42 4Z" fill="#cbd5e1" />
+              <path d="M20 28h8v22h-8V28Zm18 0h8v22h-8V28Zm18 0h8v22h-8V28Z" fill="#94a3b8" />
+              <path d="M14 52h56v7H14v-7Z" fill="#cbd5e1" />
+              <circle cx="24" cy="49" r="10" fill="#d9e2ec" stroke="#94a3b8" strokeWidth="2" />
+              <circle cx="60" cy="49" r="10" fill="#d9e2ec" stroke="#94a3b8" strokeWidth="2" />
+            </svg>
+          </div>
 
           <h1 className="pay-title">Pay NGN {DISPLAY_PRICE.toLocaleString()}</h1>
+
           <div className="copy-row">
             <button className="copy-amount" onClick={() => copyText('amount', String(DISPLAY_PRICE))}>
               <CopyIcon /> Copy amount
@@ -387,13 +432,21 @@ export default function Checkout() {
 
           <div className="account-card">
             <div className="account-main">
-              <MoniepointMark />
-              <div className="bank-name">{BANK_NAME}</div>
+              <div className="bank-row">
+                <KudaMark />
+                <div style={{ textAlign: 'left' }}>
+                  <span className="bank-label">Bank name</span>
+                  <div className="bank-name">{BANK_NAME}</div>
+                </div>
+              </div>
+
               <button className="account-number" onClick={() => copyText('account number', ACCOUNT_NUMBER)}>
                 {ACCOUNT_NUMBER} <CopyIcon size={18} />
               </button>
+
               <div className="account-name">{ACCOUNT_NAME}</div>
             </div>
+
             <div className="warning-footer">
               <span className="minus">-</span>
               <span>Do not save or reuse this account number.</span>
@@ -401,7 +454,11 @@ export default function Checkout() {
           </div>
 
           <div className="copied">{copied ? `${copied} copied` : ''}</div>
-          <div className="progress-wrap"><div className="progress-bar" /></div>
+
+          <div className="progress-wrap">
+            <div className="progress-bar" />
+          </div>
+
           <div className="timer">Payment window: {minutes}:{seconds}</div>
           <div className="confirm-note">You will get a confirmation once we receive your payment.</div>
 
@@ -411,21 +468,20 @@ export default function Checkout() {
 
           {paymentStatus === 'awaiting' && (
             <div className="awaiting-box" role="status">
-              <div className="awaiting-title">Awaiting payment confirmation</div>
-              <div className="small muted">Your payment has been submitted for vendor confirmation.</div>
+              <div className="awaiting-title">Redirecting to WhatsApp...</div>
+              <div className="small muted">Your payment details are ready for confirmation.</div>
               <button className="btn vendor-button" onClick={contactVendor}>
-                Contact the VENDOR
+                Open WhatsApp again
               </button>
             </div>
           )}
 
           <div className="footer-actions">
-            <button className="text-action cancel" onClick={() => router.push('/buy-code')}>Cancel</button>
+            <button className="text-action cancel" onClick={() => router.push('/buy-code')}>
+              Cancel
+            </button>
             <span className="divider" />
-            <button
-              className="text-action help"
-              onClick={() => window.open(`https://wa.me/${WA.replace('+', '')}`, '_blank', 'noopener')}
-            >
+            <button className="text-action help" onClick={() => window.open(`https://wa.me/${WA.replace('+', '')}`, '_blank', 'noopener')}>
               Help?
             </button>
           </div>
