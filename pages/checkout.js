@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import { saveTx } from '../utils/storage';
 
-const CODE_PRICE = 7000;
-const DISPLAY_PRICE = 7000;
+const CODE_PRICE = 10000;
+const DISPLAY_PRICE = 10000;
 const ACCOUNT_NUMBER = '2077767374';
 const ACCOUNT_NAME = 'Usman Amina';
 const BANK_NAME = 'Kuda Bank';
